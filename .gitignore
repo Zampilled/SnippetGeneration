@@ -1,1 +1,4 @@
 /.idea/
+/output/out.csv
+/output/out_new.csv
+/poetry.lock
