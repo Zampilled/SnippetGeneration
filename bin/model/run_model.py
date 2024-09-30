@@ -1,5 +1,6 @@
+import pandas
 from transformers import AutoModelForCausalLM, AutoTokenizer
-
+from tqdm import tqdm
 
 class SnippetModel:
     def __init__(self, name, device):
@@ -15,21 +16,22 @@ class SnippetModel:
         return self.tokenizer.encode(row, return_tensors="pt").to(self.device)
 
     def tokenize_data(self):
-        print(self.data["processed"])
-        self.data["tokenized"] = self.data["processed"].apply(self.tokenize_one)
-        print(self.data)
+        tqdm.pandas()
+        self.data["tokenized"] = self.data["processed"].progress_apply(self.tokenize_one)
 
     def run_model_once(self, row):
-        return self.model.generate(row, max_length=100)
+        return self.model.generate(row, max_length=1000)
 
     def run_model(self):
-        self.data["output"] = self.data["tokenized"].apply(self.run_model_once)
+        tqdm.pandas()
+        self.data["output"] = self.data["tokenized"].progress_apply(self.run_model_once)
 
     def decode_one(self, row):
-        return self.tokenizer.decode(row[0])
+        return self.tokenizer.decode(row[0], skip_special_tokens=True, clean_up_tokenization_spaces=False)
 
     def decode_data(self):
-        self.data["decoded_output"] = self.data["output"].apply(self.decode_one)
+        tqdm.pandas()
+        self.data["decoded_output"] = self.data["output"].progress_apply(self.decode_one)
 
     def get_output(self):
         return self.data["decoded_output"]

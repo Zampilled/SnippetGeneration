@@ -2,9 +2,10 @@ import random
 
 
 def individual_snippets(row):
-    rand1 = random.randint(1, int(len(row) / 2))
-    rand2 = random.randint(int(len(row) / 2), len(row) - 2)
-    row = "<fim_prefix>" + row[:rand1] + "<fim_suffix>" + row[rand2:] + "<fim_middle>"
+    length_row = len(row)
+    rand1 = random.randint((length_row // 4) + 1, length_row // 2)
+    rand2 = random.randint((length_row // 2) + 1, 3 * (length_row // 4))
+    row =  "<fim_prefix>" +row[:rand1] + " <fim_suffix> " + row[rand2:] + "<fim_middle>"
     return row
 
 
