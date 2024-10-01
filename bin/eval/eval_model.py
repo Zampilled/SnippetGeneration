@@ -16,15 +16,15 @@ def ter(inputs: pd.DataFrame):
 
 def eval_model(inputdir : str, outputdir: str):
     inputs = pd.read_csv(inputdir)
-    print("Running Exact Match...")
+    print("\tRunning Exact Match...")
     inputs["em"] = inputs.apply(lambda x: em(x), axis=1)
 
-    print("Running CHRF...")
+    print("\tRunning CHRF...")
     inputs["chrf"] = inputs.apply(lambda x: chrf(x), axis=1)
 
-    print("Running BLEU...")
+    print("\tRunning BLEU...")
     inputs["bleu"] = inputs.apply(lambda x: bleu(x), axis=1)
 
-    print("Running TER...")
+    print("\tRunning TER...")
     inputs["ter"] = inputs.apply(lambda x: ter(x), axis=1)
     inputs.to_csv(outputdir)

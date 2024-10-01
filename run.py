@@ -1,6 +1,7 @@
 from bin.data.snippet import create_snippets
 from bin.data.process import get_data
 from bin.eval.eval_model import eval_model
+from bin.eval.graph import graph_metrics
 from bin.model.model import SnippetModel
 
 import torch
@@ -36,5 +37,8 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 # print("Saving results...")
 # df.to_csv("output/out.csv", index=False)
 
-print("Testing Model...")
-eval_model("output/out.csv", "output/metrics.csv")
+# print("Testing Model...")
+# eval_model("output/out.csv", "output/metrics.csv")
+
+print("Graphing Metrics")
+graph_metrics("output/metrics.csv", "output/metrics.png")
