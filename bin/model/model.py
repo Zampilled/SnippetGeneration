@@ -20,7 +20,7 @@ class SnippetModel:
         self.data["tokenized"] = self.data["processed"].progress_apply(self.tokenize_one)
 
     def run_model_once(self, row):
-        return self.model.generate(row, max_length=1000)
+        return self.model.generate(row, max_length=1000, do_sample=True, num_return_sequences=3)
 
     def run_model(self):
         tqdm.pandas()
@@ -31,9 +31,9 @@ class SnippetModel:
 
     def decode_data(self):
         tqdm.pandas()
-        self.data["decoded_output"] = self.data["output"].progress_apply(self.decode_one)
+        self.data["predictions"] = self.data["output"].progress_apply(self.decode_one)
 
     def get_output(self):
-        return self.data["decoded_output"]
+        return self.data
 
 
