@@ -1,2 +1,0 @@
-raw
-"class AdminOrderAPI(ListAPIView):\n    permission_classes = [\n        permissions.IsAdminUser\n    ]\n    serializer_class = OrderSerializer\n    def get_queryset(self):\n        return Order.objects.filter(sent=False)\n\n\nclass OrderAPI(ListAPIView):\n    permission_classes = [\n        permissions.IsAuthenticated\n    ]\n    serializer_class = OrderSerializer\n    def get_queryset(self):\n        return Order.objects.filter(owner=self.request.user, received=False)"

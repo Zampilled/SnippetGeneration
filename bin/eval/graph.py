@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 def graph_metrics(inputdir: str, outputdir: str):
     df = pd.read_csv(inputdir)
 
-    df = pd.DataFrame({"em": df["em"], "chrf": df["chrf"], "bleu": df["bleu"], "ter": df["ter"]})
+
 
 
     colors = sns.color_palette()
