@@ -11,6 +11,7 @@ transformers = "^4.44.2"
 pandas = "^2.2.2"
 tqdm = "^4.66.5"
 numpy = "1.26.4"
+sacrebleu = "^2.4.3"
 
 [build-system]
 requires = ["poetry-core"]
