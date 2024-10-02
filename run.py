@@ -1,15 +1,13 @@
 import random
 import argparse
+import os
+import pandas as pd
+import torch
 
 from bin.data.snippet import create_snippets
 from bin.eval.eval_model import eval_model
 from bin.eval.graph import graph_metrics
 from bin.model.model import SnippetModel
-
-import pandas as pd
-import torch
-
-
 
 
 def main(input_csv: str, output_csv: str, metrics_csv: str, metrics_mean_csv: str, full_data_csv: str, graph_out: str, checkpoint: str, random_seed: int, test_only: bool):
@@ -81,5 +79,8 @@ if __name__ == "__main__":
 
 
     args = parser.parse_args()
+
+    output_dir = os.path.dirname("output/")
+    os.makedirs(output_dir, exist_ok=True)
 
     main(args.input_csv, args.output_csv, args.metrics_csv, args.metrics_mean_csv, args.full_data_csv, args.graph_out, args.checkpoint, args.random_seed, args.test_only)

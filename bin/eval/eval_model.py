@@ -67,4 +67,3 @@ def eval_model(inputdir: str, metricsdir: str, outputdir: str, meandir: str):
     mean_values = inputs.mean().to_list()
     mean_values = pd.DataFrame({"em": ['{0:.2f}'.format(mean_values[0])], "chrf": ['{0:.2f}'.format(mean_values[1])], "bleu": ['{0:.2f}'.format(mean_values[2])], "ter": ['{0:.2f}'.format(mean_values[3])]})
     mean_values.to_csv(meandir, index=False)
-    print(mean_values)
