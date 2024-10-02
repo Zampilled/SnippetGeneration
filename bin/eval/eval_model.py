@@ -2,19 +2,52 @@ import pandas as pd
 import sacrebleu
 
 
-def em(inputs : pd.DataFrame):
+def em(inputs: pd.DataFrame):
+    """
+    Exact Match Metric
+    :param inputs: DataFrame containing at least two columns, 'raw' and 'predictions'.
+    :return: 1 if all values in 'raw' column are equal to corresponding values in 'predictions' column, otherwise 0.
+    """
     return int(inputs["raw"] == inputs["predictions"])
 
-def chrf(inputs : pd.DataFrame):
+
+def chrf(inputs: pd.DataFrame):
+    """
+    CHRF Metric
+    :param inputs: pandas DataFrame containing 'raw' and 'predictions' columns
+    :return: CHRF score calculated using sacrebleu's corpus_chrf method
+    """
     return sacrebleu.corpus_chrf([inputs["raw"]], [[inputs["predictions"]]]).score
 
+
 def bleu(inputs: pd.DataFrame):
+    """
+    BLEU Metric
+    :param inputs: Pandas DataFrame containing columns 'raw' and 'predictions'.
+    :return: BLEU score of the input predictions compared to the raw text.
+    """
     return sacrebleu.corpus_bleu([inputs["raw"]], [[inputs["predictions"]]]).score
 
+
 def ter(inputs: pd.DataFrame):
+    """
+    TER Metric
+    :param inputs: A pandas DataFrame containing columns "raw" and "predictions".
+    :return: TER (Translation Edit Rate) score as calculated by sacrebleu.corpus_ter.
+    """
     return sacrebleu.corpus_ter([inputs["raw"]], [[inputs["predictions"]]]).score
 
-def eval_model(inputdir : str, metricsdir: str, outputdir: str):
+
+def eval_model(inputdir: str, metricsdir: str, outputdir: str, meandir: str):
+    """
+    Evaluates the model using Exact Match, CHRF, BLEU, and TER. It outputs this data in full of the input data and
+    as its own CSV file.
+    :param inputdir: The path to the input CSV file containing the data.
+    :param metricsdir: The path where the metrics results will be saved.
+    :param outputdir: The path where the output CSV file with all calculations will be saved.
+    :param meandir: The path where the output metric means to be saved
+    :return: None
+    """
     inputs = pd.read_csv(inputdir)
     print("\tRunning Exact Match...")
     inputs["em"] = inputs.apply(lambda x: em(x), axis=1)
@@ -27,6 +60,10 @@ def eval_model(inputdir : str, metricsdir: str, outputdir: str):
 
     print("\tRunning TER...")
     inputs["ter"] = inputs.apply(lambda x: ter(x), axis=1)
-    inputs.to_csv(outputdir)
+
+    inputs.to_csv(outputdir, index=False)
     inputs = pd.DataFrame({"em": inputs["em"], "chrf": inputs["chrf"], "bleu": inputs["bleu"], "ter": inputs["ter"]})
-    inputs.to_csv(metricsdir)
+    inputs.to_csv(metricsdir, index=False)
+    mean_values = inputs.mean().to_list()
+    mean_values = pd.DataFrame({"em": ['{0:.2f}'.format(mean_values[0])], "chrf": ['{0:.2f}'.format(mean_values[1])], "bleu": ['{0:.2f}'.format(mean_values[2])], "ter": ['{0:.2f}'.format(mean_values[3])]})
+    mean_values.to_csv(meandir, index=False)
